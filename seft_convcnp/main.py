@@ -1,4 +1,5 @@
 import os
+import sys
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import tensorflow as tf
 import tensorflow_datasets as tfds
@@ -25,11 +26,13 @@ def main():
     num_epochs = 4
     init_learning_rate = 1e-3
     num_points = 50 * points_per_hour # 48 hours + 1 hour before and later ---> 50 hours
-    grid = tf.linspace(-1.0, 49.0, num_points)
 
     ## Load data (epochs doesn't matter because it iterates over the dataset indefinetely)
     transformation = preprocessing(dataset='physionet2012', epochs=num_epochs, batch_size=batch_size)
     train_iter, steps_per_epoch, val_iter, val_steps, test_iter, test_steps = transformation._prepare_dataset_for_training()
+
+    ## Create the grid used for the functional representation
+    grid = tf.linspace(-1.0, 49.0, num_points)
 
     ## Initialize the model
     model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, filter_size)
