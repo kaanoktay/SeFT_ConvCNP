@@ -1,0 +1,5 @@
+pandas<0.26.0,>=0.25.3
+pip>=19.0.0
+setuptools>=41.0.0
+tensorflow-datasets>=2.0.0
+tensorflow>=1.15.2
