@@ -62,39 +62,44 @@ class convCNP(keras.Model):
         self.conv_1 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
-            activation="relu",
             padding="same"
         )
         self.conv_2 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
-            activation="relu",
             padding="same"
         )
         self.conv_3 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
-            activation="relu",
             padding="same"
         )
         self.conv_4 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
-            activation="relu",
             padding="same"
         )
+
         self.dense_1 = keras.layers.Dense(
-            units=256,
-            activation="relu"
+            units=256
         )
         self.dense_2 = keras.layers.Dense(
-            units=1,
-            activation="sigmoid"
+            units=1
         )
+
         self.max_pool = keras.layers.MaxPooling1D(
             pool_size=2
         )
         self.flatten = keras.layers.Flatten()
+
+        self.relu = keras.layers.Activation(keras.activations.relu)
+        self.sigmoid = keras.layers.Activation(keras.activations.sigmoid)
+
+        self.bn_1 = tf.keras.layers.BatchNormalization()
+        self.bn_2 = tf.keras.layers.BatchNormalization()
+        self.bn_3 = tf.keras.layers.BatchNormalization()
+        self.bn_4 = tf.keras.layers.BatchNormalization()
+        self.bn_5 = tf.keras.layers.BatchNormalization()
 
     def call(self, inputs):
         x = inputs[1]
@@ -105,24 +110,35 @@ class convCNP(keras.Model):
         func = self.funcLayer(y, x, mask)
         # First conv layer
         z = self.conv_1(func)
+        z = self.bn_1(z)
+        z = self.relu(z)
         # Second conv layer
         z = self.dropout_conv(z)
         z = self.conv_2(z)
+        z = self.bn_2(z)
+        z = self.relu(z)
         z = self.max_pool(z)
         # Third conv layer 
         z = self.dropout_conv(z)
         z = self.conv_3(z)
+        z = self.bn_3(z)
+        z = self.relu(z)
         # Fourth conv layer
         z = self.dropout_conv(z)
         z = self.conv_4(z)
+        z = self.bn_4(z)
+        z = self.relu(z)
         z = self.max_pool(z)
         # Flatten
         z = self.flatten(z)
         # First dense layer
         z = self.dropout_dense(z)
         z = self.dense_1(z)
+        z = self.bn_5(z)
+        z = self.relu(z)
         # Second dense layer
         z = self.dropout_dense(z)
-        out = self.dense_2(z)
+        z = self.dense_2(z)
+        out = self.relu(z)
 
         return out

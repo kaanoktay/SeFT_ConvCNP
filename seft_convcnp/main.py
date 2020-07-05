@@ -34,8 +34,8 @@ def main():
     dropout_rate_conv = args.dropout_rate_conv #Default: 0.2
     dropout_rate_dense = args.dropout_rate_dense #Default: 0.2
     filter_size = args.filter_size #Default: 64
-    lr_decay_steps = args.lr_decay_steps #Default: 1000
-    lr_decay_rate = args.lr_decay_rate #Default: 0.95
+    lr_decay_patience = args.lr_decay_patience #Default: 2
+    lr_decay_rate = args.lr_decay_rate #Default: 0.2
 
     ## Load data (epochs doesn't matter because it iterates over the dataset indefinetely)
     transformation = preprocessing(dataset='physionet2012', epochs=num_epochs, batch_size=batch_size)
@@ -49,31 +49,15 @@ def main():
     model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, 
                     kernel_size, dropout_rate_conv, dropout_rate_dense, filter_size)
 
-    ## Learning rate schedule
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=init_learning_rate,
-        decay_steps=lr_decay_steps,
-        decay_rate=lr_decay_rate
-    )
-
     ## Optimizer function
     opt = keras.optimizers.Adam(
-        learning_rate=lr_schedule
+        learning_rate=init_learning_rate
     )
 
     ## Loss function
     loss_fn = keras.losses.BinaryCrossentropy(
         from_logits=False,
         name="Loss"
-    )
-
-    ## Callback for saving the weights of the best model
-    model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
-        filepath=checkpoint_filepath,
-        save_weights_only=True,
-        monitor='val_auprc',
-        mode='max',
-        save_best_only=True
     )
 
     ## Compile the model
@@ -85,6 +69,24 @@ def main():
                  keras.metrics.AUC(curve="PR", name="auprc")]
     )
 
+    ## Callback for reducing the learning rate when the model get stuck in a plateau
+    lr_schedule_callback = keras.callbacks.ReduceLROnPlateau(
+        monitor='val_auprc',
+        mode='max',
+        factor=lr_decay_rate,
+        patience=lr_decay_patience, 
+        min_lr=0.0001
+    )
+
+    ## Callback for saving the weights of the best model
+    model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
+        filepath=checkpoint_filepath,
+        save_weights_only=True,
+        monitor='val_auprc',
+        mode='max',
+        save_best_only=True
+    )
+
     ## Fit the model to the input data
     model.fit(
         train_iter,
@@ -93,7 +95,8 @@ def main():
         validation_data=val_iter,
         validation_steps=val_steps-1,
         verbose=1,
-        callbacks=[model_checkpoint_callback]
+        callbacks=[model_checkpoint_callback,
+                   lr_schedule_callback]
     )
 
 if __name__ == "__main__":

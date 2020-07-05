@@ -26,8 +26,8 @@ def argumentParser():
     parser.add_argument('--dropout_rate_conv', type=float, default=0.2, metavar="0.2", help='dropout rate of the convolutional layers')
     parser.add_argument('--dropout_rate_dense', type=float, default=0.2, metavar="0.2", help='dropout rate of the dense layers')
     parser.add_argument('--filter_size', type=int, default=64, metavar="64", help='filter size of the first convolutional layer')
-    parser.add_argument('--lr_decay_steps', type=int, default=1000, metavar="1000", help='number of steps after which learning rate decays')
-    parser.add_argument('--lr_decay_rate', type=float, default=0.95, metavar="0.95", help='decay rate of learning rate')
+    parser.add_argument('--lr_decay_patience', type=int, default=2, metavar="2", help='number of unimproving epochs after which learning rate decays')
+    parser.add_argument('--lr_decay_rate', type=float, default=0.2, metavar="0.2", help='decay rate of learning rate')
     return parser.parse_args()
 
 ## After this point, everything is related to preprocessing of batches ##
