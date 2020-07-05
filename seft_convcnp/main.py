@@ -37,24 +37,31 @@ def main():
     ## Initialize the model
     model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, filter_size)
 
-    ## Optimization and loss
+    ## Learning rate schedule
     lr_schedule = keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=init_learning_rate,
         decay_steps=1000,
         decay_rate=0.9
     )
+
+    ## Optimizer function
     opt = keras.optimizers.Adam(
         learning_rate=lr_schedule
     )
+
+    ## Loss function
     loss_fn = keras.losses.BinaryCrossentropy(
-        from_logits=False
+        from_logits=False,
+        name="Loss"
     )
 
     ## Compile the model
     model.compile(
         optimizer=opt,
         loss=loss_fn,
-        metrics=[keras.metrics.BinaryAccuracy(), keras.metrics.AUC()]
+        metrics=[keras.metrics.BinaryAccuracy(name="accuracy"), 
+                 keras.metrics.AUC(curve="ROC", name="auroc"), 
+                 keras.metrics.AUC(curve="PR", name="auprc")]
     )
 
     ## Fit the model to the input data
@@ -66,8 +73,6 @@ def main():
         validation_steps=val_steps,
         verbose=1
     )
-
-
 
 if __name__ == "__main__":
     main()
