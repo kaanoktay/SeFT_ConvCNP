@@ -82,7 +82,7 @@ def main():
         monitor='val_auprc',
         mode='max',
         patience=3,
-        restore_best_weights=False
+        restore_best_weights=True
     )
 
     ## Callback for saving the weights of the best model
@@ -106,6 +106,14 @@ def main():
                    lr_schedule_callback,
                    early_stopping_callback]
     )
+
+    ## Fit the model to the input data
+    model.evaluate(
+        test_iter,
+        steps=test_steps-1,
+        verbose=1
+    )
+
 
 if __name__ == "__main__":
     main()
