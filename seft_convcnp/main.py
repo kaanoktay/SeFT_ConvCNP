@@ -34,6 +34,8 @@ def main():
     dropout_rate_conv = args.dropout_rate_conv #Default: 0.2
     dropout_rate_dense = args.dropout_rate_dense #Default: 0.2
     filter_size = args.filter_size #Default: 64
+    lr_decay_steps = args.lr_decay_steps #Default: 1000
+    lr_decay_rate = args.lr_decay_rate #Default: 0.95
 
     ## Load data (epochs doesn't matter because it iterates over the dataset indefinetely)
     transformation = preprocessing(dataset='physionet2012', epochs=num_epochs, batch_size=batch_size)
@@ -50,8 +52,8 @@ def main():
     ## Learning rate schedule
     lr_schedule = keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=init_learning_rate,
-        decay_steps=1000,
-        decay_rate=0.9
+        decay_steps=lr_decay_steps,
+        decay_rate=lr_decay_rate
     )
 
     ## Optimizer function

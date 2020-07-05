@@ -43,5 +43,5 @@
 
   ```bash
   poetry install
-  poetry run main --batch_size 16 --points_per_hour 20 --num_epochs 5 --init_learning_rate 0.001 --kernel_size 5 --dropout_rate_conv 0.1 --dropout_rate_dense 0.4 --filter_size 64
+  poetry run main --batch_size 16 --points_per_hour 30 --num_epochs 100 --init_learning_rate 0.003 --kernel_size 9 --dropout_rate_conv 0.1 --dropout_rate_dense 0.4 --filter_size 128 --lr_decay_steps 1000 --lr_decay_rate 0.95
   ```
