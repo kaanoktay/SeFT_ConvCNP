@@ -1,6 +1,5 @@
 import os
 import sys
-os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow import keras
@@ -16,9 +15,10 @@ from .model import (
     convCNP
 )
 
-print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
-
+checkpoint_filepath = '/tmp/checkpoint'
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 tf.random.set_seed(0)
+print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
 
 def main():
     ## Parse the command line arguments
@@ -67,6 +67,15 @@ def main():
         name="Loss"
     )
 
+    ## Callback for saving the weights of the best model
+    model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
+        filepath=checkpoint_filepath,
+        save_weights_only=True,
+        monitor='val_auprc',
+        mode='max',
+        save_best_only=True
+    )
+
     ## Compile the model
     model.compile(
         optimizer=opt,
@@ -83,7 +92,8 @@ def main():
         steps_per_epoch=steps_per_epoch-1,
         validation_data=val_iter,
         validation_steps=val_steps-1,
-        verbose=1
+        verbose=1,
+        callbacks=[model_checkpoint_callback]
     )
 
 if __name__ == "__main__":
