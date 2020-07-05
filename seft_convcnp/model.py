@@ -47,38 +47,39 @@ class funcRepresentation(keras.layers.Layer):
         return tf.transpose(func, perm=[0, 2, 1])
 
 class convCNP(keras.Model):
-    def __init__(self, grid, points_per_hour, num_modalities, batch_size, num_points, filter_size=64):
+    def __init__(self, grid, points_per_hour, num_modalities, batch_size, num_points, 
+                 kernel_size, dropout_rate_conv, dropout_rate_dense, filter_size):
         super(convCNP, self).__init__()
 
         self.funcLayer = funcRepresentation(grid, points_per_hour, num_modalities, batch_size, num_points)
 
         self.dropout_conv = keras.layers.Dropout(
-            rate = 0.1
+            rate = dropout_rate_conv
         )
         self.dropout_dense = keras.layers.Dropout(
-            rate = 0.1
+            rate = dropout_rate_dense
         )
         self.conv_1 = keras.layers.Conv1D(
             filters=filter_size,
-            kernel_size=5,
+            kernel_size=kernel_size,
             activation="relu",
             padding="same"
         )
         self.conv_2 = keras.layers.Conv1D(
             filters=filter_size,
-            kernel_size=5,
+            kernel_size=kernel_size,
             activation="relu",
             padding="same"
         )
         self.conv_3 = keras.layers.Conv1D(
             filters=filter_size*2,
-            kernel_size=5,
+            kernel_size=kernel_size,
             activation="relu",
             padding="same"
         )
         self.conv_4 = keras.layers.Conv1D(
             filters=filter_size*2,
-            kernel_size=5,
+            kernel_size=kernel_size,
             activation="relu",
             padding="same"
         )

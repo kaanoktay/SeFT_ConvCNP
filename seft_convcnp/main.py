@@ -8,7 +8,8 @@ import medical_ts_datasets
 import numpy as np
 
 from .training_utils import (
-    preprocessing
+    preprocessing,
+    argumentParser
 )
 
 from .model import (
@@ -20,24 +21,31 @@ print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
 tf.random.set_seed(0)
 
 def main():
+    ## Parse the command line arguments
+    args = argumentParser()
+
     ## Hyperparameters
-    batch_size = 32
-    num_modalities = 37
-    points_per_hour = 30
-    filter_size = 64
-    num_epochs = 4
-    init_learning_rate = 1e-3
-    num_points = 50 * points_per_hour # 48 hours + 1 hour before and later ---> 50 hours
+    num_modalities = 37 #Constant for this dataset
+    batch_size = args.batch_size #Default: 16
+    points_per_hour = args.points_per_hour #Default: 30
+    num_epochs = args.num_epochs #Default: 10
+    init_learning_rate = args.init_learning_rate #Default: 1e-3
+    kernel_size = args.kernel_size #Default: 5
+    dropout_rate_conv = args.dropout_rate_conv #Default: 0.2
+    dropout_rate_dense = args.dropout_rate_dense #Default: 0.2
+    filter_size = args.filter_size #Default: 64
 
     ## Load data (epochs doesn't matter because it iterates over the dataset indefinetely)
     transformation = preprocessing(dataset='physionet2012', epochs=num_epochs, batch_size=batch_size)
     train_iter, steps_per_epoch, val_iter, val_steps, test_iter, test_steps = transformation._prepare_dataset_for_training()
 
     ## Create the grid used for the functional representation
+    num_points = 50 * points_per_hour # 48 hours + 1 hour before and later ---> 50 hours
     grid = tf.linspace(-1.0, 49.0, num_points)
 
     ## Initialize the model
-    model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, filter_size)
+    model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, 
+                    kernel_size, dropout_rate_conv, dropout_rate_dense, filter_size)
 
     ## Learning rate schedule
     lr_schedule = keras.optimizers.schedules.ExponentialDecay(

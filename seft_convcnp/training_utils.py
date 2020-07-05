@@ -8,10 +8,27 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 import medical_ts_datasets
 from .normalization import Normalizer
+import argparse
 
 get_output_shapes = tf.compat.v1.data.get_output_shapes
 get_output_types = tf.compat.v1.data.get_output_types
 make_one_shot_iterator = tf.compat.v1.data.make_one_shot_iterator
+
+
+## Function to get the command line arguments
+def argumentParser():
+    parser = argparse.ArgumentParser(description='Embedding Translational Equivariance to SeFT')
+    parser.add_argument('--batch_size', type=int, default=16, metavar="16", help='batch size')
+    parser.add_argument('--points_per_hour', type=int, default=30, metavar="30", help='points per hour for the grid')
+    parser.add_argument('--num_epochs', type=int, default=10, metavar="10", help='number of epochs')
+    parser.add_argument('--init_learning_rate', type=float, default=0.001, metavar="0.001", help='initial learning rate')
+    parser.add_argument('--kernel_size', type=int, default=5, metavar="5", help='kernel size for the convolutional layers')
+    parser.add_argument('--dropout_rate_conv', type=float, default=0.2, metavar="0.2", help='dropout rate for convolutional layers')
+    parser.add_argument('--dropout_rate_dense', type=float, default=0.2, metavar="0.2", help='dropout rate for dense layers')
+    parser.add_argument('--filter_size', type=int, default=64, metavar="64", help='filter size for the first convolutional layer')
+    return parser.parse_args()
+
+## After this point, everything is related to preprocessing of batches ##
 
 def positive_instances(*args):
     if len(args) == 2:
