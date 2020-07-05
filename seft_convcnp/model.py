@@ -139,6 +139,6 @@ class convCNP(keras.Model):
         # Second dense layer
         z = self.dropout_dense(z)
         z = self.dense_2(z)
-        out = self.relu(z)
+        out = self.sigmoid(z)
 
         return out
