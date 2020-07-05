@@ -81,10 +81,10 @@ class convCNP(keras.Model):
         )
 
         self.dense_1 = keras.layers.Dense(
-            units=1024
+            units=512
         )
         self.dense_2 = keras.layers.Dense(
-            units=128
+            units=64
         )
         self.dense_3 = keras.layers.Dense(
             units=1
@@ -133,7 +133,7 @@ class convCNP(keras.Model):
         z = self.dense_2(z)
         z = self.relu(z)
         # Last dense layer
-        #z = self.dropout_dense(z)
+        z = self.dropout_dense(z)
         z = self.dense_3(z)
         out = self.sigmoid(z)
 
