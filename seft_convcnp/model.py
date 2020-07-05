@@ -110,23 +110,19 @@ class convCNP(keras.Model):
         func = self.funcLayer(y, x, mask)
         # First conv layer
         z = self.conv_1(func)
-        z = self.bn_1(z)
         z = self.relu(z)
         # Second conv layer
         z = self.dropout_conv(z)
         z = self.conv_2(z)
-        z = self.bn_2(z)
         z = self.relu(z)
         z = self.max_pool(z)
         # Third conv layer 
         z = self.dropout_conv(z)
         z = self.conv_3(z)
-        z = self.bn_3(z)
         z = self.relu(z)
         # Fourth conv layer
         z = self.dropout_conv(z)
         z = self.conv_4(z)
-        z = self.bn_4(z)
         z = self.relu(z)
         z = self.max_pool(z)
         # Flatten
@@ -134,7 +130,6 @@ class convCNP(keras.Model):
         # First dense layer
         z = self.dropout_dense(z)
         z = self.dense_1(z)
-        z = self.bn_5(z)
         z = self.relu(z)
         # Second dense layer
         z = self.dropout_dense(z)

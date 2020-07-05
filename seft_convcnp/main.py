@@ -15,7 +15,7 @@ from .model import (
     convCNP
 )
 
-checkpoint_filepath = '/Users/kaanoktay/Desktop/Master/SeFT_ConvCNP/checkpoints/cp.ckpt'
+checkpoint_filepath = '../checkpoints/cp.ckpt'
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 tf.random.set_seed(0)
 print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
@@ -78,6 +78,13 @@ def main():
         min_lr=0.0001
     )
 
+    early_stopping_callback = keras.callbacks.EarlyStopping(
+        monitor='val_auprc',
+        mode='max',
+        patience=3,
+        restore_best_weights=False
+    )
+
     ## Callback for saving the weights of the best model
     model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_filepath,
@@ -96,7 +103,8 @@ def main():
         validation_steps=val_steps-1,
         verbose=1,
         callbacks=[model_checkpoint_callback,
-                   lr_schedule_callback]
+                   lr_schedule_callback,
+                   early_stopping_callback]
     )
 
 if __name__ == "__main__":
