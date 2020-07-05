@@ -35,7 +35,7 @@
 - Download and go inside the repository:
 
   ```bash
-  git clone git@github.com:kaanoktay/SeFT_ConvCNP.git
+  git clone https://github.com/kaanoktay/SeFT_ConvCNP.git
   cd SeFT_ConvCNP
   ```
 

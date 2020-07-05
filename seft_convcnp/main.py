@@ -78,9 +78,9 @@ def main():
     model.fit(
         train_iter,
         epochs=num_epochs,
-        steps_per_epoch=steps_per_epoch,
+        steps_per_epoch=steps_per_epoch-1,
         validation_data=val_iter,
-        validation_steps=val_steps,
+        validation_steps=val_steps-1,
         verbose=1
     )
 
