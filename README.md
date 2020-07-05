@@ -1,4 +1,4 @@
-# Instructions
+# INSTRUCTIONS
 
 ## Cluster setup
 
