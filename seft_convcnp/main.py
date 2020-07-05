@@ -15,7 +15,7 @@ from .model import (
     convCNP
 )
 
-checkpoint_filepath = '/tmp/checkpoint'
+checkpoint_filepath = '/Users/kaanoktay/Desktop/Master/SeFT_ConvCNP/checkpoints/cp.ckpt'
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 tf.random.set_seed(0)
 print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
