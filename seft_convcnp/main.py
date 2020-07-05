@@ -15,6 +15,8 @@ from .model import (
     convCNP
 )
 
+print("GPUs Available: ", tf.config.experimental.list_physical_devices('GPU'))
+
 tf.random.set_seed(0)
 
 def main():
