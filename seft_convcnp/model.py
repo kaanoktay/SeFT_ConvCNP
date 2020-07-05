@@ -133,7 +133,7 @@ class convCNP(keras.Model):
         z = self.dense_2(z)
         z = self.relu(z)
         # Last dense layer
-        z = self.dropout_dense(z)
+        #z = self.dropout_dense(z)
         z = self.dense_3(z)
         out = self.sigmoid(z)
 

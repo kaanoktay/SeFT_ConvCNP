@@ -64,9 +64,9 @@ def main():
     model.compile(
         optimizer=opt,
         loss=loss_fn,
-        metrics=[keras.metrics.BinaryAccuracy(name="accuracy"), 
-                 keras.metrics.AUC(curve="ROC", name="auroc"), 
-                 keras.metrics.AUC(curve="PR", name="auprc")]
+        metrics=[keras.metrics.BinaryAccuracy(name="accuracy"),
+                 keras.metrics.AUC(curve="PR", name="auprc"),
+                 keras.metrics.AUC(curve="ROC", name="auroc")]
     )
 
     ## Callback for reducing the learning rate when the model get stuck in a plateau
