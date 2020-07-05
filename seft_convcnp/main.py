@@ -95,6 +95,7 @@ def main():
     )
 
     ## Fit the model to the input data
+    print("------- Training and Validation -------")
     model.fit(
         train_iter,
         epochs=num_epochs,
@@ -107,6 +108,7 @@ def main():
                    early_stopping_callback]
     )
 
+    print("------- Test -------")
     ## Fit the model to the input data
     model.evaluate(
         test_iter,

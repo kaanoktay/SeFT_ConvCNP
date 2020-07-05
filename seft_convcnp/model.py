@@ -81,9 +81,12 @@ class convCNP(keras.Model):
         )
 
         self.dense_1 = keras.layers.Dense(
-            units=256
+            units=1024
         )
         self.dense_2 = keras.layers.Dense(
+            units=128
+        )
+        self.dense_3 = keras.layers.Dense(
             units=1
         )
 
@@ -94,12 +97,6 @@ class convCNP(keras.Model):
 
         self.relu = keras.layers.Activation(keras.activations.relu)
         self.sigmoid = keras.layers.Activation(keras.activations.sigmoid)
-
-        self.bn_1 = tf.keras.layers.BatchNormalization()
-        self.bn_2 = tf.keras.layers.BatchNormalization()
-        self.bn_3 = tf.keras.layers.BatchNormalization()
-        self.bn_4 = tf.keras.layers.BatchNormalization()
-        self.bn_5 = tf.keras.layers.BatchNormalization()
 
     def call(self, inputs):
         x = inputs[1]
@@ -134,6 +131,10 @@ class convCNP(keras.Model):
         # Second dense layer
         z = self.dropout_dense(z)
         z = self.dense_2(z)
+        z = self.relu(z)
+        # Last dense layer
+        #z = self.dropout_dense(z)
+        z = self.dense_3(z)
         out = self.sigmoid(z)
 
         return out
