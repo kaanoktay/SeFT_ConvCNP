@@ -62,21 +62,25 @@ class convCNP(keras.Model):
         self.conv_1 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
+            dilation_rate=2,
             padding="same"
         )
         self.conv_2 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
+            dilation_rate=2,
             padding="same"
         )
         self.conv_3 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
+            dilation_rate=2,
             padding="same"
         )
         self.conv_4 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
+            dilation_rate=2,
             padding="same"
         )
 
