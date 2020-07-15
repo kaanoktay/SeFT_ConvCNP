@@ -63,35 +63,42 @@ class convCNP(keras.Model):
             filters=filter_size,
             kernel_size=kernel_size,
             dilation_rate=dilation_rate,
-            padding="same"
+            padding="same",
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
         self.conv_2 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
             dilation_rate=dilation_rate,
-            padding="same"
+            padding="same",
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
         self.conv_3 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
             dilation_rate=dilation_rate,
-            padding="same"
+            padding="same",
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
         self.conv_4 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
             dilation_rate=dilation_rate,
-            padding="same"
+            padding="same",
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
 
         self.dense_1 = keras.layers.Dense(
-            units=512
+            units=512,
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
         self.dense_2 = keras.layers.Dense(
-            units=64
+            units=64,
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
         self.dense_3 = keras.layers.Dense(
-            units=1
+            units=1,
+            kernel_regularizer=keras.regularizers.l1(0.01)
         )
 
         self.max_pool = keras.layers.MaxPooling1D(
