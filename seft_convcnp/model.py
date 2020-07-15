@@ -48,7 +48,7 @@ class funcRepresentation(keras.layers.Layer):
 
 class convCNP(keras.Model):
     def __init__(self, grid, points_per_hour, num_modalities, batch_size, num_points, 
-                 kernel_size, dropout_rate_conv, dropout_rate_dense, filter_size):
+                 kernel_size, dilation_rate, filter_size, dropout_rate_conv, dropout_rate_dense):
         super(convCNP, self).__init__()
 
         self.funcLayer = funcRepresentation(grid, points_per_hour, num_modalities, batch_size, num_points)
@@ -62,25 +62,25 @@ class convCNP(keras.Model):
         self.conv_1 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
-            dilation_rate=2,
+            dilation_rate=dilation_rate,
             padding="same"
         )
         self.conv_2 = keras.layers.Conv1D(
             filters=filter_size,
             kernel_size=kernel_size,
-            dilation_rate=2,
+            dilation_rate=dilation_rate,
             padding="same"
         )
         self.conv_3 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
-            dilation_rate=2,
+            dilation_rate=dilation_rate,
             padding="same"
         )
         self.conv_4 = keras.layers.Conv1D(
             filters=filter_size*2,
             kernel_size=kernel_size,
-            dilation_rate=2,
+            dilation_rate=dilation_rate,
             padding="same"
         )
 

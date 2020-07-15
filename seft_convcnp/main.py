@@ -31,9 +31,10 @@ def main():
     num_epochs = args.num_epochs #Default: 10
     init_learning_rate = args.init_learning_rate #Default: 1e-3
     kernel_size = args.kernel_size #Default: 5
+    dilation_rate = args.dilation_rate #Default: 2
+    filter_size = args.filter_size #Default: 64
     dropout_rate_conv = args.dropout_rate_conv #Default: 0.2
     dropout_rate_dense = args.dropout_rate_dense #Default: 0.2
-    filter_size = args.filter_size #Default: 64
     lr_decay_patience = args.lr_decay_patience #Default: 2
     lr_decay_rate = args.lr_decay_rate #Default: 0.2
 
@@ -47,7 +48,7 @@ def main():
 
     ## Initialize the model
     model = convCNP(grid, points_per_hour, num_modalities, batch_size, num_points, 
-                    kernel_size, dropout_rate_conv, dropout_rate_dense, filter_size)
+                    kernel_size, dilation_rate, filter_size, dropout_rate_conv, dropout_rate_dense)
 
     ## Optimizer function
     opt = keras.optimizers.Adam(
